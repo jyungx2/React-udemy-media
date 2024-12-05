@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUsers } from "../thunks/fetchUsers";
 
+// 이 usersSlice는 reducers 속성이 아닌, extraReducers만을 활용할 것이다. => 왜?
 const usersSlice = createSlice({
   name: "users",
   initialState: {
@@ -8,21 +9,26 @@ const usersSlice = createSlice({
     isLoading: false,
     error: null,
   },
+  // The goal of extraReducers is to allow us to watch for some additional action types. To watch for actions that are being dispatched that are not inherently tied to the slice. => ✨action type: pending/fulfilled/rejected✨
   extraReducers(builder) {
-    // "users/fetch/pending"과 같은 문자열을 직접 쓰는 대신,
-    // 오타 발생 가능성을 줄이기 위해 비동기 액션 생성 함수인 fetchUsers에 .pending을 붙여 사용한다.
+    // "users/fetch/pending"(action obj의 type속성값과의 비교대상.. 매치되면 호출되고, 그렇지 않으면 호출 안됨!)과 같은 문자열을 직접 쓰는 대신,
+    // 오타 발생 가능성을 줄이기 위해 비동기 액션 생성 함수(action creator)인 fetchUsers에 .pending을 붙여 사용한다.
     builder.addCase(fetchUsers.pending, (state, action) => {
       // 데이터를 로딩 중임을 사용자에게 보여주기 위해 state 객체를 적절히 업데이트한다.
       state.isLoading = true;
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.isLoading = false;
-      // Assumption: action.payload = [{id: 1, name: 'Maya'}] = what we fetch from the API.
+      // (💥가정이 아닌 FACT💥)
+      // action.payload = [{id: 1, name: 'Maya'}] = This is what we fetch from the API.
+      // fetchUsers(AsyncThunk)로부터 리턴받은 우리가 사용할 데이터(response.data)는 자동으로 fulfilled action의 payload 속성값으로 설정되기 때문에, 우리는 액션 객체의 payload값을 state.data로 설정해야 함!
       state.data = action.payload;
     });
     builder.addCase(fetchUsers.rejected, (state, action) => {
       state.isLoading = false;
-      // when error comes up, action 객체 안에서 error라는 키 네임의 객체가 생성됨. (payload가 아님!)
+      // (💥가정이 아닌 FACT💥)
+      // 데이터 요청에 실패하면, error 객체가 자동으로 생성되고, 이 객체는 payload가 아닌, error라는 키 네임의 속성값으로 설정된다.
+      // 즉, 액션 객체는 type, error 이렇게 두가지 키 값을 가지게 되고, 우리는 이 error(key)에 해당하는 밸류(객체)를 사용할 것.
       state.error = action.error;
     });
   },
