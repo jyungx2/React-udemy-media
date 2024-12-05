@@ -26,8 +26,22 @@ import axios from "axios";
 const fetchUsers = createAsyncThunk("users/fetch", async () => {
   const response = await axios.get("http://localhost:3005/users");
 
+  // DEV ONLY!!
+  // 개발 및 테스트 환경에서 의도적으로 지연 시간을 추가하고, 이를 비동기적으로 처리하려는 목적에서 사용
+  await pause(1000);
+
   return response.data; // reducer에서 사용하고 싶은 데이터를 리턴 = [{id: 1, name: 'myra'}]
 });
+
+// DEV ONLY!! (helper function: pause)
+const pause = (duration) => {
+  // 💥 pause 함수에서 Promise를 반환한 이유는 비동기 흐름 제어를 위해 async/await를 사용하기 위해서이며, createAsyncThunk가 "무조건 비동기 작업만 처리해야 하기 때문"은 아니다.
+  // ✍🏼 setTimeout 자체는 비동기적으로 동작하지만, setTimeout만으로는 await 키워드를 사용할 수 없다.
+  // ✍🏼 따라서 pause는 setTimeout을 감싸는 Promise를 만들어, await 키워드로 호출할 수 있도록 구현된 것입니다.
+  return new Promise((resolve) => {
+    setTimeout(resolve, duration);
+  });
+};
 
 export { fetchUsers };
 
