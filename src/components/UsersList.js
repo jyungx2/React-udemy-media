@@ -1,29 +1,53 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, addUser } from "../store"; // fetchUsers 자체 파일에서 가져오는 게 아닌, central point인 index.js로부터 가져오자!!
 import Skeleton from "./Skeleton";
 import Button from "../components/Button";
 
 function UsersList() {
+  // 🌟 Locale Fine-Grained Loading State
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [loadingUsersError, setLoadingUsersError] = useState(null);
+
   const dispatch = useDispatch();
-  const { data, isLoading, error } = useSelector((state) => {
+  const { data } = useSelector((state) => {
     return state.users; // {data: [], isLoading: false, error: null}
   });
 
   // 💫 컴포넌트가 처음 렌더링될 때 데이터를 가져오기 위해 useEffect 사용
   useEffect(() => {
-    dispatch(fetchUsers());
+    setIsLoadingUsers(true);
+    dispatch(fetchUsers())
+      .unwrap() // ✅ return a brand new Promise which follows the conventional rules.
+      .then(() => {
+        console.log("SUCCESS");
+      })
+      .catch(() => {
+        console.log("FAIL!!!");
+      });
+
+    // BAD!! ... dispatch call: asynchronous in nature. (Not waiting..!)
+    // setIsLoadingUsers(false);
   }, [dispatch]);
 
   const handleUserAdd = () => {
     dispatch(addUser()); // name은 addUser thunks에서 faker library를 이용해 자동으로 생성하고 있으니 아무 인자가 필요없다!
   };
 
-  if (isLoading) {
+  // 🌟 Locale Fine-Grained Loading State
+  // if (isLoading) {
+  //   return <Skeleton times={6} className="h-10 w-full" />;
+  // }
+
+  // if (error) {
+  //   return <div>Error fetching data...</div>;
+  // }
+
+  if (isLoadingUsers) {
     return <Skeleton times={6} className="h-10 w-full" />;
   }
 
-  if (error) {
+  if (loadingUsersError) {
     return <div>Error fetching data...</div>;
   }
 
