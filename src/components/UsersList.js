@@ -17,14 +17,21 @@ function UsersList() {
   // 💫 컴포넌트가 처음 렌더링될 때 데이터를 가져오기 위해 useEffect 사용
   useEffect(() => {
     setIsLoadingUsers(true);
+
+    // 379. Local Fine-Grained Loading State
+    // ✨dispatch(fetchUsers())✨ => Returns a promise
+    // This promise's .then gets called whether the request succeeds or 💥'fails'💥.
+    // Argument to the .then is the fulfilled or rejected action object.
     dispatch(fetchUsers())
       .unwrap() // ✅ return a brand new Promise which follows the conventional rules.
-      .then(() => {
-        console.log("SUCCESS");
-      })
-      .catch(() => {
-        console.log("FAIL!!!");
-      });
+      // .then(() => {
+      //   console.log("SUCCESS");
+      // })
+      .catch((err) => setLoadingUsersError(err))
+      .finally(
+        () => setIsLoadingUsers(false)
+        // hide the spinner
+      );
 
     // BAD!! ... dispatch call: asynchronous in nature. (Not waiting..!)
     // setIsLoadingUsers(false);
