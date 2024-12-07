@@ -9,6 +9,10 @@ function UsersList() {
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [loadingUsersError, setLoadingUsersError] = useState(null);
 
+  // 🌟 Handling Errors with User Creation
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [creatingUserError, setCreatingUserError] = useState(null);
+
   const dispatch = useDispatch();
   const { data } = useSelector((state) => {
     return state.users; // {data: [], isLoading: false, error: null}
@@ -38,7 +42,12 @@ function UsersList() {
   }, [dispatch]);
 
   const handleUserAdd = () => {
-    dispatch(addUser()); // name은 addUser thunks에서 faker library를 이용해 자동으로 생성하고 있으니 아무 인자가 필요없다!
+    setIsCreatingUser(true); // display the spinner
+    dispatch(addUser()) // name은 addUser thunks에서 faker library를 이용해 자동으로 생성하고 있으니 아무 인자가 필요없다!
+      .unwrap()
+      .then()
+      .catch((err) => setCreatingUserError(err))
+      .finally(() => setIsCreatingUser(false));
   };
 
   // 🌟 Locale Fine-Grained Loading State
@@ -60,9 +69,9 @@ function UsersList() {
 
   const renderedUsers = data.map((user) => {
     return (
-      <div key={user.id} className="mb-2 border rounded">
+      <div key={user?.id} className="mb-2 border rounded">
         <div className="flex p-2 justify-between items-center cursor-pointer">
-          {user.name}
+          {user?.name}
         </div>
       </div>
     );
@@ -72,7 +81,12 @@ function UsersList() {
     <div>
       <div className="flex flex-row justify-between m-3">
         <h1 className="m-2 text-xl">Users</h1>
-        <Button onClick={handleUserAdd}>+ Add User</Button>
+        {isCreatingUser ? (
+          "Creating User..."
+        ) : (
+          <Button onClick={handleUserAdd}>+ Add User</Button>
+        )}
+        {creatingUserError && "Error creating user..."}
       </div>
       {renderedUsers}
     </div>
