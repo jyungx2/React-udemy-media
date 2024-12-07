@@ -1,5 +1,26 @@
 {
-  "users": [{ "id": 1, "name": "Myra" }],
+  "users": [
+    {
+      "id": "1",
+      "name": "Myra"
+    },
+    {
+      "id": "ac4a",
+      "name": "Ms. Laurie Aufderhar"
+    },
+    {
+      "id": "b445",
+      "name": "Joan Rohan"
+    },
+    {
+      "id": "9f04",
+      "name": "Bernadette Klein"
+    },
+    {
+      "id": "f513",
+      "name": "Vicki Von"
+    }
+  ],
   "albums": [],
   "photos": []
 }

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUsers } from "../thunks/fetchUsers";
+import { addUser } from "../thunks/addUser";
 
 // 이 usersSlice는 reducers 속성이 아닌, extraReducers만을 활용할 것이다. => 왜?
 const usersSlice = createSlice({
@@ -19,17 +20,31 @@ const usersSlice = createSlice({
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.isLoading = false;
-      // (💥가정이 아닌 FACT💥)
+      // (💥가정이 아닌 FACT💥 => AsyncThunks의 내부적인 세팅)
       // action.payload = [{id: 1, name: 'Maya'}] = This is what we fetch from the API.
-      // fetchUsers(AsyncThunk)로부터 리턴받은 우리가 사용할 데이터(response.data)는 자동으로 fulfilled action의 payload 속성값으로 설정되기 때문에, 우리는 액션 객체의 payload값을 state.data로 설정해야 함!
+      // fetchUsers(AsyncThunk)로부터 리턴받은 우리가 사용할 데이터(response.data)는 ✨자동으로✨ fulfilled action의 ✨payload 속성값으로 설정✨되기 때문에, 우리는 액션 객체의 payload값을 state.data로 설정해야 함!
       state.data = action.payload;
     });
     builder.addCase(fetchUsers.rejected, (state, action) => {
       state.isLoading = false;
       // (💥가정이 아닌 FACT💥)
-      // 데이터 요청에 실패하면, error 객체가 자동으로 생성되고, 이 객체는 payload가 아닌, error라는 키 네임의 속성값으로 설정된다.
+      // 데이터 요청에 실패하면, error 객체가 ✨자동으로✨ 생성되고, 이 객체는 payload가 아닌, ✨error라는 키 네임의 속성값✨으로 설정된다.
       // 즉, 액션 객체는 type, error 이렇게 두가지 키 값을 가지게 되고, 우리는 이 error(key)에 해당하는 밸류(객체)를 사용할 것.
       state.error = action.error;
+    });
+
+    builder.addCase(addUser.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(addUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.data.push(action.payload);
+    });
+
+    builder.addCase(addUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.data.push(action.payload);
     });
   },
 });
