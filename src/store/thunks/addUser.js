@@ -8,7 +8,7 @@ const addUser = createAsyncThunk("users/add", async () => {
     name: faker.name.fullName(), // name is being randomly generated.
   });
 
-  return response.data;
+  return response.data; // 새롭게 생성된 유저 객체 반환 ..POST 요청의 응답으로 서버에서 생성된 데이터를 반환받는 방식이기 때문
 });
 
 export { addUser };

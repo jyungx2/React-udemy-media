@@ -40,12 +40,12 @@ const usersSlice = createSlice({
 
     builder.addCase(addUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data.push(action.payload);
+      state.data.push(action.payload); // action.payload = 서버로부터 반환된, 새롭게 추가된 데이터(유저 객체)
     });
 
     builder.addCase(addUser.rejected, (state, action) => {
       state.isLoading = false;
-      state.data.push(action.payload);
+      state.error = action.error;
     });
 
     builder.addCase(removeUser.pending, (state, action) => {
@@ -56,6 +56,27 @@ const usersSlice = createSlice({
       state.isLoading = false;
       // FIX ME!!!
       console.log(action);
+
+      // 🪄 389. Fixing a Delete User
+
+      // 🛠️ Fixing Delete User: 이유 설명
+      // DELETE 요청 시 서버는 기본적으로 빈 객체를 반환합니다 (response.data = {}).
+      // 기존에는 서버에서 삭제된 데이터를 반환할 것으로 예상했으나,
+      // 실제로는 서버 응답에 삭제된 user 정보가 포함되지 않아 문제가 발생했습니다.
+      // 따라서, DELETE 요청의 응답 데이터를 그대로 사용하지 않고,
+      // 삭제할 유저 정보를 action.payload로 반환하도록 수정했습니다.
+
+      // ❓왜 response.data가 빈 객체일까요?
+      // DELETE 요청은 데이터 조회(GET), 생성(POST) 요청과 달리 "리소스의 삭제 성공 여부만 중요"한 경우가 많습니다. 따라서, 서버는 단순히 상태 코드(예: 200 OK, 204 No Content)와 함께 빈 객체나 아무 데이터도 반환하지 않을 수 있습니다.
+
+      // 💫 데이터를 업데이트: 삭제된 user를 제외한 새로운 배열 생성
+      state.data = state.data.filter((user) => {
+        // 여기서 action.payload = HTTP delete 요청으로부터 받아온 데이터..
+        // 원래 response.data를 리턴하려고 했지만, 이는 delete 요청시에 빈 객체를 반환하는 미스테리한 오류 존재 ...get 방식의 요청시에 받아온 data가 아닌, user자체를 리턴하도록 할 것임!!
+        // => 따라서, action.paylod = 우리가 삭제할 user 객체
+        return user.id !== action.payload.id;
+        // 삭제하려는 유저 ID와 비교해, 해당 유저를 제외한 배열을 반환합니다.
+      });
     });
 
     builder.addCase(removeUser.rejected, (state, action) => {
