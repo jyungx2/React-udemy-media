@@ -14,3 +14,4 @@ export * from "./thunks/fetchUsers";
 // === fetchUsers에 있는 모든 코드와 더불어, index.js에 있는 코드까지 다 export한다는 뜻...
 
 export * from "./thunks/addUser";
+export * from "./thunks/removeUser";
