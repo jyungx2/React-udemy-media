@@ -1,5 +1,22 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "9d16",
+      "name": "Esther Anderson"
+    },
+    {
+      "id": "959a",
+      "name": "Kendra Johnston"
+    },
+    {
+      "id": "2a3f",
+      "name": "Monique Cremin"
+    },
+    {
+      "id": "8cf6",
+      "name": "Jenny Corkery"
+    }
+  ],
   "albums": [],
   "photos": []
 }
