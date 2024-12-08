@@ -35,7 +35,7 @@ function Button({
 
   return (
     // 모든 HTML 버튼 요소들은 Disabled라는 Prop을 받는다.
-    // 해당 prop value가 true일 때마다, 버튼의 클릭 이벤트가 호출되지 않는다.(click event is blocked.)
+    // 해당 prop value (=loading)가 true일 때마다, 즉 로딩중일 때마다 시용자가 버튼을 클릭하지 못하게 막는다. (click event is blocked.)
     <button {...rest} disabled={loading} className={classes}>
       {loading ? <GoSync className="animate-spin" /> : children}
     </button>
