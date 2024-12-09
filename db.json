@@ -17,6 +17,12 @@
       "name": "Jenny Corkery"
     }
   ],
-  "albums": [],
+  "albums": [
+    {
+      "id": 10,
+      "title": "Hiking Trip",
+      "userId": "9d16"
+    }
+  ],
   "photos": []
 }

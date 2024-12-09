@@ -34,6 +34,9 @@ const albumsApi = createApi({
   },
 });
 
+export const { useFetchAlbumsQuery } = albumsApi;
+export { albumsApi };
+
 // 📝 Creating a RTK Query API
 // 1. Identify a group of related requests that your app needs to make.
 // 2. Make a new file that will create the api.
