@@ -15,6 +15,10 @@ export const store = configureStore({
   },
 });
 
+// TEMPORARY
+window.store = store;
+// store.getState() // {users: {...}, albums: {...}}
+
 setupListeners(store.dispatch);
 
 // ✅ 5. Export the thunk from the store/index.js file
