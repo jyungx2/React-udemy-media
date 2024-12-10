@@ -2,6 +2,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // 403. Use this hook to generate some fake text to make a fake ablum title.
 import { faker } from "@faker-js/faker";
 
+// DEV ONLY!!!!
+const pause = (duration) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, duration);
+  });
+};
+
 // ✅ RTK Query의 createApi 함수를 사용해 API를 생성.
 // - 여기서 API는 백엔드 서버를 생성하는 것이 아니라, React 애플리케이션에서 데이터를 요청하는 클라이언트 측 코드를 말함.
 // - 생성된 API에는 다양한 Redux 기능이 포함 (슬라이스(Slice): 리듀서, 액션 생성기 포함 비동기 작업 관리용 Thunk 함수)
@@ -12,6 +19,16 @@ const albumsApi = createApi({
   // 2️⃣ fetchBaseQuery: fetch의 몇 가지 불편한 점(예: JSON 변환, 오류 처리)을 미리 설정하여 편리하게 사용할 수 있도록
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3005", // where our server is hosted?
+
+    // 411. Adding a Pause for Testing
+    // createApi()의 baseQuery 옵션에서 "fetchFn"은 기본적으로 사용하는 HTTP 요청 함수인 fetch를 재정의하거나 커스터마이징할 수 있도록 설계된 기능으로, 브라우저의 기본 fetch 동작을 대체(Redux Toolkit Query는 기본적으로 브라우저의 fetch API를 사용해 데이터를 가져오므로..)하거나 확장하여 특정 요구사항을 처리할 수 있는 유연성(하지만 fetchFn을 정의하면 기본 fetch 대신 사용자 정의 로직을 삽입 가능..)을 제공
+    // 예를 들어, 개발 도중 **지연(Pause)**을 추가하거나, 요청을 가로채서 로깅하거나, 요청을 변환하는 등의 작업이 가능
+    fetchFn: async (...args) => {
+      // REMOVE FOR PRODUCTION (개발 중 테스트용 코드)
+      await pause(1000); // 1초의 지연을 인위적으로 추가
+      // 이렇게 하면 사용자 인터페이스(UI)에서 비동기 요청 처리(로딩 스피너, 스켈레톤 컴포넌트 등)가 올바르게 작동하는지 테스트할 수 있습
+      return fetch(...args);
+    },
   }),
   // 3️⃣ endpoints: Redux Toolkit Query에 어떤 요청을 할지를 정의하는 부분
   endpoints(builder) {
