@@ -1,9 +1,9 @@
 import { useFetchAlbumsQuery } from "../store";
 
 function AlbumsList({ user }) {
-  const { data, error, isLoading } = useFetchAlbumsQuery(user);
+  const results = useFetchAlbumsQuery(user);
 
-  console.log(data, error, isLoading);
+  console.log(results);
   return <div>Albums for {user.name}</div>;
 }
 
