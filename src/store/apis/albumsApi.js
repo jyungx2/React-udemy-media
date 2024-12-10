@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+// 403. Use this hook to generate some fake text to make a fake ablum title.
+import { faker } from "@faker-js/faker";
 
 // ✅ RTK Query의 createApi 함수를 사용해 API를 생성.
 // - 여기서 API는 백엔드 서버를 생성하는 것이 아니라, React 애플리케이션에서 데이터를 요청하는 클라이언트 측 코드를 말함.
@@ -14,6 +16,20 @@ const albumsApi = createApi({
   // 3️⃣ endpoints: Redux Toolkit Query에 어떤 요청을 할지를 정의하는 부분
   endpoints(builder) {
     return {
+      addAlbum: builder.mutation({
+        // *query Fn: this is used for telling RTK Query about some parameters to use for the request.
+        query: (user) => {
+          return {
+            url: "/albums",
+            // we don't need any query string params.
+            method: "POST",
+            body: {
+              userId: user.id,
+              title: faker.commerce.productName(),
+            },
+          };
+        },
+      }),
       // ✅ The goal of this query function is to specify exactly how to make the request!
       // API 생성 시 자동으로 데이터 요청/조작용 Hook이 만들어지고, 이때 훅의 이름은 endpoints함수의 리턴값들의 key값들이 포함된다.
       // ex) use✨FetchAlbums✨Query: 데이터를 가져오는 Query 요청
@@ -34,7 +50,7 @@ const albumsApi = createApi({
   },
 });
 
-export const { useFetchAlbumsQuery } = albumsApi;
+export const { useFetchAlbumsQuery, useAddAlbumMutation } = albumsApi;
 export { albumsApi };
 
 // 📝 Creating a RTK Query API
