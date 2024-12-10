@@ -17,7 +17,10 @@ const albumsApi = createApi({
   endpoints(builder) {
     return {
       addAlbum: builder.mutation({
-        // *query Fn: this is used for telling RTK Query about some parameters to use for the request.
+        // 📝 408.
+        // fetchAlbums의 tag와 같은 이름의 tag를 써주어 addAlbum이라는 mutation이 일어났을 때, 동일한 태그("Album")를 invalid(유효하지 않음) 상태로 만듦으로써, fetchAlbums라는 쿼리함수를 재실행하여 업데이트된 데이터로 화면을 리렌더링 시킴
+        invalidatesTags: ["Album"],
+        // * query Fn: this is used for telling RTK Query about some parameters to use for the request.
         query: (user) => {
           return {
             url: "/albums",
@@ -36,6 +39,17 @@ const albumsApi = createApi({
 
       // Tell Redux Toolkit Query how to make a req to "fetch the list of albums".
       fetchAlbums: builder.query({
+        // 📝 408.
+        // fetchAlbums를 호출할 때 해당 요청을 Album 태그로 표시 => 이 쿼리로 가져온 데이터는 "Album"이라는 태그로 표시...
+        // 태그는 데이터를 식별하고, 특정 데이터를 재조회(refetch)할 필요가 있을 때 활용.. 즉, 태그는 "데이터 동기화"를 위한 ✨기준점✨으로 사용!
+        // 태그 이름은 자유롭게 설정 가능, 일반적으로 리소스의 이름과 관련된 간단한 문자열로 설정..('Album', 'User', 'Post' 등..)
+        // 단, 같은 태그 이름을 사용하는 쿼리와 뮤테이션 간에만 동작이 연결되기 때문에, 뮤테이션 발생시, 특정 쿼리의 데이터를 무효화시켜 업데이트된 최신 데이터로 갱신하고 싶으면, 같은 네임의 키를 써줘야 한다!
+        // ex) 새로운 앨범을 추가하는 AddAlbum 뮤테이션에서, invalidatesTags: ["Album"]을 설정하면, 해당 태그로 표시된 쿼리(fetchAlbums)가 "유효하지 않음"(stale, not fresh)으로 표시되고 자동으로 재실행
+
+        // 1️⃣ 유효하지 않음 (Invalidated): 특정 태그와 연결된 쿼리가 더 이상 신뢰할 수 없는 상태임을 표시.
+        // 2️⃣ stale (구식): 데이터를 다시 가져와야 할 필요성을 의미.
+        // => 이 두 표현은 실질적으로 같은 의미로 사용됩니다.
+        providesTags: ["Album"],
         query: (user) => {
           return {
             url: "/albums",
