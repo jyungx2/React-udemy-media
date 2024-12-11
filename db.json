@@ -15,19 +15,13 @@
     {
       "id": "8cf6",
       "name": "Jenny Corkery"
+    },
+    {
+      "id": "0ea7",
+      "name": "Marlene Lehner"
     }
   ],
   "albums": [
-    {
-      "id": "10",
-      "title": "Hiking Trip",
-      "userId": "9d16"
-    },
-    {
-      "id": "798d",
-      "userId": "9d16",
-      "title": "Oriental Concrete Cheese"
-    },
     {
       "id": "0da2",
       "userId": "9d16",

@@ -33,6 +33,14 @@ const albumsApi = createApi({
   // 3️⃣ endpoints: Redux Toolkit Query에 어떤 요청을 할지를 정의하는 부분
   endpoints(builder) {
     return {
+      removeAlbum: builder.mutation({
+        query: (album) => {
+          return {
+            url: `/albums/${album.id}`,
+            method: "DELETE",
+          };
+        },
+      }),
       addAlbum: builder.mutation({
         // 📝 408.
         // fetchAlbums의 tag와 같은 이름의 tag를 써주어 addAlbum이라는 mutation이 일어났을 때, 동일한 태그("Album")를 invalid(유효하지 않음) 상태로 만듦으로써, fetchAlbums라는 쿼리함수를 재실행하여 업데이트된 데이터로 화면을 리렌더링 시킴
@@ -97,7 +105,11 @@ const albumsApi = createApi({
   },
 });
 
-export const { useFetchAlbumsQuery, useAddAlbumMutation } = albumsApi;
+export const {
+  useFetchAlbumsQuery,
+  useAddAlbumMutation,
+  useRemoveAlbumMutation,
+} = albumsApi;
 export { albumsApi };
 
 // 📝 Creating a RTK Query API

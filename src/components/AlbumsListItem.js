@@ -1,15 +1,24 @@
 import { GoTrashcan } from "react-icons/go";
 import Button from "./Button";
 import ExpandablePanel from "./ExpandablePanel";
+import { useRemoveAlbumMutation } from "../store";
 
 function AlbumsListItem({ album }) {
+  // 1️⃣ removeAlbum: function to call to run the actual mutation.
+  // 2️⃣ results: literally results of an object.
+  const [removeAlbum, results] = useRemoveAlbumMutation();
+
+  const handleRemoveAlbum = () => {
+    removeAlbum(album);
+  };
+
   const header = (
-    <div>
-      <Button>
+    <>
+      <Button loading={results.isLoading} onClick={handleRemoveAlbum}>
         <GoTrashcan />
       </Button>
       {album.title}
-    </div>
+    </>
   );
 
   return (
