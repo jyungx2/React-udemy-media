@@ -35,11 +35,13 @@ const albumsApi = createApi({
     return {
       removeAlbum: builder.mutation({
         invalidatesTags: (result, error, album) => {
-          console.log(album);
+          console.log(album); // userId를 가지고 있음 (미리 설계해놨기 때문)
           // ❓❗️ What would we do if we don't have an userId in the album object??
           // 앨범을 삭제할 때, 해당 앨범이 어떤 유저의 것인지 알고 있어야 모든 유저의 앨범리스트를 refetch하지 않고, 삭제된 앨범을 가지고 있는 유저의 리스트만 refetch하여 불필요한 렌더링을 막고, 성능을 높일 수 있다..
           // => 만약 이 부분을 고려하지 않고 코딩했다고 가정하면, 우리는 어떻게 해야 할까??
-          return [{ type: "Album", id: album.userId }];
+          // ✅ 416. More Clever Tag Implementation
+          // return [{ type: "Album", id: album.userId }];
+          return [{ type: "Album", id: album.id }];
         },
         query: (album) => {
           return {
@@ -56,7 +58,9 @@ const albumsApi = createApi({
         // 여기서 user는 AlbumsList.js에서 handleAddAlbum함수 안의 addAlbum(user)의 인자값(=user)을 뜻함
         // ✅ 이제 더이상 Myra의 앨범을 추가할 때 다른 유저들의 앨범 리스트 또한 같이 조회되지 않는다! (문제해결!)
         invalidatesTags: (result, error, user) => {
-          return [{ type: "Album", id: user.id }];
+          // ✅ 416. More Clever Tag Implementation
+          // return [{ type: "Album", id: user.id }];
+          return [{ type: "UsersAlbums", id: user.id }];
         },
         // * query Fn: this is used for telling RTK Query about some parameters to use for the request.
         query: (user) => {
@@ -96,7 +100,15 @@ const albumsApi = createApi({
         // 특정 사용자에게만 쿼리함수를 적용시키기 위해 고유한 user의 id값을 태그에 포함시켜 객체형태로 태그를 추가하자...
         // 이때 user는 providesTags를 함수형태로 불러올 때, 자동으로 받는 3가지 인자(result, error, user(arg))에 포함되어 있기 때문에 사용가능! 이때 user는 useFetchAlbumsQuery()라는 훅에 전달한 인자값(= {id: 1, name: 'Myra'})을 지칭.
         providesTags: (result, error, user) => {
-          return [{ type: "Album", id: user.id }];
+          // ✅ 416. More Clever Tag Implementation
+          const tags = result.map((album) => {
+            // "removeAlbum" endpoint에서 리턴할 객체 형태의 태그
+            return { type: "Album", id: album.id };
+          });
+          // "addAlbum" endpoint에서 리턴할 객체 형태의 태그
+          tags.push({ type: "UsersAlbums", id: user.id });
+          return tags;
+          // return [{ type: "Album", id: user.id }];
         },
         query: (user) => {
           return {
@@ -128,3 +140,6 @@ export { albumsApi };
 // 6. Export all of the automatically generated hooks.
 // 7. Connect the API to the store. Reducer, middleware, and listeners.
 // 8. Export the hooks from store/index.js file.
+
+// 415. Getting Clever with Cache Tags
+// If any of those tags get invalidated, then the entire endpoint is gonna re-fetch data.
