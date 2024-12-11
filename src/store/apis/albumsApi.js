@@ -34,6 +34,13 @@ const albumsApi = createApi({
   endpoints(builder) {
     return {
       removeAlbum: builder.mutation({
+        invalidatesTags: (result, error, album) => {
+          console.log(album);
+          // ❓❗️ What would we do if we don't have an userId in the album object??
+          // 앨범을 삭제할 때, 해당 앨범이 어떤 유저의 것인지 알고 있어야 모든 유저의 앨범리스트를 refetch하지 않고, 삭제된 앨범을 가지고 있는 유저의 리스트만 refetch하여 불필요한 렌더링을 막고, 성능을 높일 수 있다..
+          // => 만약 이 부분을 고려하지 않고 코딩했다고 가정하면, 우리는 어떻게 해야 할까??
+          return [{ type: "Album", id: album.userId }];
+        },
         query: (album) => {
           return {
             url: `/albums/${album.id}`,
