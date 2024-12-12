@@ -61,7 +61,88 @@
       "id": "e686",
       "userId": "9d16",
       "title": "Sleek Wooden Cheese"
+    },
+    {
+      "id": "efc3",
+      "userId": "9d16",
+      "title": "Electronic Concrete Bacon"
+    },
+    {
+      "id": "ba0b",
+      "userId": "8cf6",
+      "title": "Bespoke Rubber Tuna"
     }
   ],
-  "photos": []
+  "photos": [
+    {
+      "id": "332d",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=85464"
+    },
+    {
+      "id": "3fa9",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=64016"
+    },
+    {
+      "id": "e22e",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=54182"
+    },
+    {
+      "id": "e238",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=25617"
+    },
+    {
+      "id": "c0e7",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=82402"
+    },
+    {
+      "id": "5ba1",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=79655"
+    },
+    {
+      "id": "5d94",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=82591"
+    },
+    {
+      "id": "5f90",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=56255"
+    },
+    {
+      "id": "6d00",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=24860"
+    },
+    {
+      "id": "1289",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=78261"
+    },
+    {
+      "id": "4fd9",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=74959"
+    },
+    {
+      "id": "92ae",
+      "albumId": "47cf",
+      "url": "https://loremflickr.com/150/150/abstract?lock=97233"
+    },
+    {
+      "id": "bde4",
+      "albumId": "ba0b",
+      "url": "https://loremflickr.com/150/150/abstract?lock=60332"
+    },
+    {
+      "id": "f18c",
+      "albumId": "ba0b",
+      "url": "https://loremflickr.com/150/150/abstract?lock=74049"
+    }
+  ]
 }

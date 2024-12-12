@@ -21,7 +21,7 @@ const photosApi = createApi({
         },
       }),
       addPhoto: builder.mutation({
-        // 현재 mutation을 실행할 때, 'album' object를 제공한다는 크나큰 가정이 필요!
+        // 현재 mutation을 실행할 때, 'album' object를 제공한다는 크나큰 가정이 필요! (사진을 추가할 때는 어느 앨범 안에 추가할지가 중요하기 때문에 album을 인자로 넣어준다..)
         query: (album) => {
           return {
             method: "POST",
@@ -34,7 +34,7 @@ const photosApi = createApi({
         },
       }),
       removePhoto: builder.mutation({
-        // 현재 mutation을 실행할 때, 'photo' object를 제공한다는 크나큰 가정이 필요!
+        // 현재 mutation을 실행할 때, 'photo' object를 제공한다는 크나큰 가정이 필요! (사진을 삭제할 때는 어느 앨범인지 보다, 그 사진의 아이디를 이용해 삭제하는 것이기 때문에 사진을 인자로 넣어준다..)
         query: (photo) => {
           return {
             method: "DELETE",
