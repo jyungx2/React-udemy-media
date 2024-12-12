@@ -23,16 +23,6 @@
   ],
   "albums": [
     {
-      "id": "0da2",
-      "userId": "9d16",
-      "title": "Sleek Frozen Soap"
-    },
-    {
-      "id": "44c2",
-      "userId": "9d16",
-      "title": "Refined Bronze Mouse"
-    },
-    {
       "id": "47cf",
       "userId": "9d16",
       "title": "Gorgeous Rubber Salad"
@@ -66,6 +56,11 @@
       "id": "f470",
       "userId": "0ea7",
       "title": "Fantastic Cotton Keyboard"
+    },
+    {
+      "id": "e686",
+      "userId": "9d16",
+      "title": "Sleek Wooden Cheese"
     }
   ],
   "photos": []
