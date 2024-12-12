@@ -102,10 +102,10 @@ const albumsApi = createApi({
         providesTags: (result, error, user) => {
           // ✅ 416. More Clever Tag Implementation
           const tags = result.map((album) => {
-            // "removeAlbum" endpoint에서 리턴할 객체 형태의 태그
+            // "removeAlbum" endpoint에서 리턴(인식)할 객체 형태의 태그
             return { type: "Album", id: album.id };
           });
-          // "addAlbum" endpoint에서 리턴할 객체 형태의 태그
+          // "addAlbum" endpoint에서 리턴(인식)할 객체 형태의 태그
           tags.push({ type: "UsersAlbums", id: user.id });
           return tags;
           // return [{ type: "Album", id: user.id }];
